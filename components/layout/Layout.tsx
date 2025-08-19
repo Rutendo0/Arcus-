@@ -5,6 +5,7 @@ import { Bell, Search as SearchIcon } from "lucide-react";
 import dynamic from "next/dynamic";
 const ProfileMenu = dynamic(() => import("../ProfileMenu"), { ssr: false });
 import { ReactNode } from "react";
+import { TickerStrip } from "../ticker/TickerBar";
 
 // Accessible site layout with Header / Main / Footer
 // - Includes skip link, keyboard focus styles, and global search
@@ -44,9 +45,22 @@ function Header() {
     <header
       className="sticky top-0 z-40 border-b border-primary-100 bg-white shadow-md backdrop-blur-md supports-[backdrop-filter]:bg-white/95"
       role="banner"
+      style={{ overflow: 'visible' }}
     >
-      <div className="max-w-7xl mx-auto">
-        <div className="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6">
+      {/* Exchange Ticker at the top */}
+      <div className="border-b border-blue-200 bg-white/80 backdrop-blur-md">
+        <div className="px-6 py-2">
+          <div className="flex items-center gap-2 mb-1">
+            <h2 className="text-sm font-semibold tracking-tight text-foreground">
+              Live Exchange Rates <span className="text-slate-400">(RBZ Official Rates)</span>
+            </h2>
+          </div>
+          <TickerStrip className="rounded-lg shadow-sm" />
+        </div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto" style={{ overflow: 'visible' }}>
+        <div className="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-6" style={{ overflow: 'visible' }}>
           {/* Brand */}
           <Link href="/" className="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-primary-300 rounded-md group">
             <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-primary-600 to-primary-800 shadow-md group-hover:shadow-lg transition-all duration-300" aria-hidden="true">
@@ -82,7 +96,7 @@ function Header() {
           </form>
 
           {/* Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3" style={{ overflow: 'visible' }}>
             <button
               type="button"
               aria-label="Search"

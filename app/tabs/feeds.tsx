@@ -63,26 +63,26 @@ const CombinedRateCard = ({
   const list = currentView === "crypto" ? cryptoData : forexData;
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-900/90 via-indigo-800/90 to-purple-900/90 p-4 shadow-[0_8px_30px_rgba(79,70,229,0.2)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_8px_30px_rgba(79,70,229,0.3)]">
+    <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-900/90 via-indigo-800/90 to-purple-900/90 p-3 shadow-[0_8px_30px_rgba(79,70,229,0.2)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_8px_30px_rgba(79,70,229,0.3)]">
       {/* Animated background effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/10 via-purple-600/5 to-blue-600/10 opacity-30" />
       <div className="absolute -inset-[100%] animate-[spin_60s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_340deg,rgba(56,189,248,0.1)_360deg)] blur-3xl" />
       
       {/* Header */}
-      <div className="relative mb-3 flex items-center justify-between">
+      <div className="relative mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg">
-            <DollarSign size={18} />
+          <span className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg">
+            <DollarSign size={16} />
           </span>
           <div>
-            <h3 className="text-base font-semibold text-white">
+            <h3 className="text-sm font-semibold text-white">
               {getCurrentTitle()}
             </h3>
-            <p className="text-xs text-indigo-200/80">Live market rates</p>
+            <p className="text-xs text-indigo-200/80">Live rates</p>
           </div>
           {isCurrentlyLoading() && (
             <span className="ml-2 inline-block align-middle">
-              <span className="h-4 w-4 animate-spin rounded-full border-b-2 border-t-2 border-indigo-300" />
+              <span className="h-3 w-3 animate-spin rounded-full border-b-2 border-t-2 border-indigo-300" />
             </span>
           )}
         </div>
@@ -109,7 +109,7 @@ const CombinedRateCard = ({
       </div>
 
       {/* List */}
-      <div className="relative rounded-xl bg-indigo-950/30 p-2 backdrop-blur-sm">
+      <div className="relative rounded-xl bg-indigo-950/30 p-1.5 backdrop-blur-sm">
         <AnimatePresence mode="wait">
           <motion.ul
             key={currentView}
@@ -119,10 +119,10 @@ const CombinedRateCard = ({
             transition={{ duration: 0.18 }}
             className={`divide-y divide-indigo-800/50 ${isTransitioning ? "pointer-events-none opacity-60" : "opacity-100"}`}
           >
-            {list.map((item, idx) => (
+            {list.slice(0, 4).map((item, idx) => (
               <li
                 key={`${currentView}-${idx}`}
-                className="flex min-h-[42px] items-center justify-between gap-2 rounded-lg py-2 px-3 transition-colors hover:bg-indigo-800/30"
+                className="flex min-h-[36px] items-center justify-between gap-2 rounded-lg py-1.5 px-2 transition-colors hover:bg-indigo-800/30"
               >
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-indigo-100">
@@ -157,27 +157,27 @@ const CombinedRateCard = ({
       </div>
 
       {/* Nav controls (mobile friendly) */}
-      <div className="relative mt-3 flex items-center justify-between">
+      <div className="relative mt-2 flex items-center justify-between">
         <button
           onClick={() => switchView(currentView === "crypto" ? "forex" : "crypto")}
-          className="rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-3 py-1.5 text-xs font-medium text-white shadow-md transition-all hover:shadow-lg"
+          className="rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-2 py-1 text-xs font-medium text-white shadow-md transition-all hover:shadow-lg"
         >
-          {currentView === "crypto" ? "View Forex" : "View Crypto"}
+          {currentView === "crypto" ? "Forex" : "Crypto"}
         </button>
         <div className="flex items-center gap-1">
           <button
             onClick={() => switchView("crypto")}
-            className="rounded-full bg-indigo-800/50 p-1.5 text-indigo-200 transition-colors hover:bg-indigo-700 hover:text-white"
+            className="rounded-full bg-indigo-800/50 p-1 text-indigo-200 transition-colors hover:bg-indigo-700 hover:text-white"
             aria-label="Crypto"
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={14} />
           </button>
           <button
             onClick={() => switchView("forex")}
-            className="rounded-full bg-indigo-800/50 p-1.5 text-indigo-200 transition-colors hover:bg-indigo-700 hover:text-white"
+            className="rounded-full bg-indigo-800/50 p-1 text-indigo-200 transition-colors hover:bg-indigo-700 hover:text-white"
             aria-label="Forex"
           >
-            <ChevronRight size={16} />
+            <ChevronRight size={14} />
           </button>
         </div>
       </div>
@@ -387,11 +387,11 @@ const FeedPage = () => {
         {filteredFeeds.length > 0 && !feedsLoading && (
           <>
             <div 
-              className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-8 gap-4" 
+              className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-8 gap-1" 
               style={{ 
                 gridAutoFlow: 'row dense', 
-                gridAutoRows: 'minmax(140px, auto)',
-                gridTemplateRows: 'repeat(auto-fit, minmax(140px, auto))'
+                gridAutoRows: 'minmax(120px, auto)',
+                gridTemplateRows: 'repeat(auto-fit, minmax(120px, auto))'
               }} 
               aria-live="polite" 
               aria-busy={feedsLoading}
@@ -417,7 +417,7 @@ const FeedPage = () => {
                       whileInView={{ y: 0, opacity: 1 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.3, delay: 0.1 }}
-                      className="col-span-2 md:col-span-2 lg:col-span-2 row-span-3"
+                      className="col-span-2 md:col-span-2 lg:col-span-2 row-span-2"
                     >
                       <CombinedRateCard
                         cryptoData={rates.crypto}
@@ -438,7 +438,7 @@ const FeedPage = () => {
                       whileInView={{ y: 0, opacity: 1 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.3, delay: 0.2 }}
-                      className="col-span-2 md:col-span-2 lg:col-span-2 row-span-3"
+                      className="col-span-2 md:col-span-2 lg:col-span-2 row-span-2"
                     >
                       <WeatherCard className="w-full h-full" />
                     </motion.div>
@@ -459,20 +459,25 @@ const FeedPage = () => {
                     const feed = feedsWithImages[imageIndex];
                     let colSpan: string, rowSpan: string, size: 'small' | 'medium' | 'large' | 'featured';
 
-                    // Smarter tile sizing to reduce gaps
+                    // Prioritize image-based articles with bigger sizes
                     if (feedItemIndex === 0) {
-                      // First feed item gets featured tile
-                      colSpan = 'col-span-2 md:col-span-4 lg:col-span-4';
-                      rowSpan = 'row-span-4';
+                      // First image article gets featured tile (very large)
+                      colSpan = 'col-span-2 md:col-span-4 lg:col-span-5';
+                      rowSpan = 'row-span-5';
                       size = 'featured';
-                    } else if (feedItemIndex % 7 === 0 && feedItemIndex > 0) {
-                      // Every 7th item gets large tile
+                    } else if (feedItemIndex % 5 === 0 && feedItemIndex > 0) {
+                      // Every 5th image article gets large tile
+                      colSpan = 'col-span-2 md:col-span-3 lg:col-span-4';
+                      rowSpan = 'row-span-4';
+                      size = 'large';
+                    } else if (feedItemIndex % 3 === 0) {
+                      // Every 3rd image article gets medium-large tile
                       colSpan = 'col-span-2 md:col-span-3 lg:col-span-3';
-                      rowSpan = 'row-span-3';
+                      rowSpan = 'row-span-4';
                       size = 'large';
                     } else {
-                      // Other image items get medium tiles
-                      colSpan = 'col-span-2 md:col-span-2 lg:col-span-2';
+                      // Other image items get medium tiles (still bigger than before)
+                      colSpan = 'col-span-2 md:col-span-2 lg:col-span-3';
                       rowSpan = 'row-span-3';
                       size = 'medium';
                     }
@@ -501,7 +506,7 @@ const FeedPage = () => {
                     feedItemIndex++;
                   }
                   
-                  // Fill remaining space with text items
+                  // Fill remaining space with text items (smaller cards)
                   if (imageIndex >= feedsWithImages.length && textIndex < feedsWithoutImages.length) {
                     const feed = feedsWithoutImages[textIndex];
                     
@@ -516,7 +521,7 @@ const FeedPage = () => {
                           transition={{ duration: 0.25, delay: 0.05 * feedItemIndex, ease: "easeOut" }}
                           className="group relative col-span-2 md:col-span-2 lg:col-span-2 row-span-2"
                         >
-                          <div className="h-full [--x:50%] [--y:50%] relative overflow-hidden rounded-xl shadow-sm transition-all hover:shadow-md min-h-[280px]">
+                          <div className="h-full [--x:50%] [--y:50%] relative overflow-hidden rounded-xl shadow-sm transition-all hover:shadow-md min-h-[200px]">
                             <FeedCard feed={feed} size="small" />
                             <div className="pointer-events-none absolute -inset-12 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-40" 
                                  style={{ background: "radial-gradient(600px circle at var(--x,50%) var(--y,50%), rgba(56,189,248,.10), transparent 40%)" }} />

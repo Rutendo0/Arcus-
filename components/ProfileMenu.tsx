@@ -3,6 +3,7 @@
 import { User, Settings, LogOut, Building2, LayoutDashboard, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 interface UserData {
   id: string;
@@ -33,8 +34,10 @@ export default function ProfileMenu() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, right: 0 });
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   // Fetch user on mount
   useEffect(() => {
@@ -78,9 +81,18 @@ export default function ProfileMenu() {
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (!isOpen) return;
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
+      const target = e.target as Node;
+      const dropdown = document.getElementById('profile-menu');
+      
+      // Don't close if clicking on the button or inside the dropdown
+      if (
+        (containerRef.current && containerRef.current.contains(target)) ||
+        (dropdown && dropdown.contains(target))
+      ) {
+        return;
       }
+      
+      setIsOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -95,9 +107,37 @@ export default function ProfileMenu() {
     return () => document.removeEventListener("keydown", handleKey);
   }, []);
 
+  // Update position on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) {
+        updateDropdownPosition();
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isOpen]);
+
   const handleSignOut = () => {
     sessionStorage.clear();
     router.push("/auth");
+  };
+
+  const updateDropdownPosition = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + 8, // 8px gap below button
+        right: window.innerWidth - rect.right, // Distance from right edge
+      });
+    }
+  };
+
+  const toggleDropdown = () => {
+    if (!isOpen) {
+      updateDropdownPosition();
+    }
+    setIsOpen((o) => !o);
   };
 
   if (loading) {
@@ -128,7 +168,8 @@ export default function ProfileMenu() {
     <div className="relative inline-block" ref={containerRef}>
       {/* Trigger */}
       <button
-        onClick={() => setIsOpen((o) => !o)}
+        ref={buttonRef}
+        onClick={toggleDropdown}
         aria-haspopup="true"
         aria-expanded={isOpen}
         aria-label="Account menu"
@@ -138,12 +179,16 @@ export default function ProfileMenu() {
       </button>
 
       {/* Dropdown */}
-      {isOpen && (
+      {isOpen && typeof window !== 'undefined' && createPortal(
         <div
           id="profile-menu"
           role="menu"
           aria-orientation="vertical"
-          className="absolute right-0 mt-2 w-72 origin-top-right z-50 rounded-lg bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-gray-900/80 border border-gray-700 shadow-xl ring-1 ring-black/5"
+          className="fixed w-72 origin-top-right z-[9999] rounded-lg bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-gray-900/80 border border-gray-700 shadow-xl ring-1 ring-black/5"
+          style={{
+            top: `${dropdownPosition.top}px`,
+            right: `${dropdownPosition.right}px`,
+          }}
         >
           {/* User summary */}
           <div className="px-4 py-3 border-b border-gray-700">
@@ -210,12 +255,13 @@ export default function ProfileMenu() {
               Sign out
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Profile Modal */}
       {showProfileModal && userData && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[9999] bg-black/50 flex items-center justify-center p-4">
           <div className="bg-gray-900/95 backdrop-blur supports-[backdrop-filter]:bg-gray-900/80 rounded-lg max-w-md w-full border border-gray-700 shadow-2xl">
             <div className="flex justify-between items-center p-4 border-b border-gray-700">
               <h3 className="text-lg font-medium text-white">Profile Information</h3>

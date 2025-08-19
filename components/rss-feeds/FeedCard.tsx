@@ -39,9 +39,9 @@ export const FeedCard = ({ feed, size = 'medium', className = '' }: FeedCardProp
   // Featured card (large with prominent image)
   if (size === 'featured' && hasImage && imageUrl) {
     return (
-      <article className={`group relative rounded-xl border border-primary-100 bg-white overflow-hidden transition-all duration-300 hover:shadow-lg h-full ${className}`}>
-        <div className="absolute inset-0 bg-gradient-to-t from-primary-950/90 via-primary-900/50 to-primary-900/20 z-10" />
-        <div className="relative h-full min-h-[500px] w-full bg-primary-50">
+      <article className={`group relative rounded-xl border border-primary-100 bg-white overflow-hidden transition-all duration-300 hover:shadow-xl h-full ${className}`}>
+        <div className="absolute inset-0 bg-gradient-to-t from-primary-950/95 via-primary-900/60 to-primary-900/20 z-10" />
+        <div className="relative h-full min-h-[600px] w-full bg-primary-50">
           <Image
             src={imageUrl}
             alt={feed.title}
@@ -84,7 +84,7 @@ export const FeedCard = ({ feed, size = 'medium', className = '' }: FeedCardProp
 
   // Large card with image
   if ((size === 'large' || size === 'medium') && hasImage && imageUrl) {
-    const imageHeight = size === 'large' ? 'h-80' : 'h-64';
+    const imageHeight = size === 'large' ? 'h-96' : 'h-72';
     
     return (
       <article className={`group rounded-xl border border-primary-100 bg-white overflow-hidden transition-all duration-300 hover:shadow-lg h-full ${className}`}>
@@ -143,16 +143,16 @@ export const FeedCard = ({ feed, size = 'medium', className = '' }: FeedCardProp
   if (size === 'small') {
     return (
       <article className={`group rounded-lg border border-primary-100 bg-white overflow-hidden transition-all duration-300 hover:shadow-md h-full ${className}`}>
-        <div className="p-4">
+        <div className="p-3">
           <div className="mb-2 flex items-center justify-between">
-            <span className={`h-2 w-2 rounded-full bg-primary-600`} aria-hidden />
+            <span className={`h-1.5 w-1.5 rounded-full bg-primary-600`} aria-hidden />
             <time className="text-xs text-primary-500" dateTime={feed.isoDate || feed.pubDate}>
               {formattedDate}
             </time>
           </div>
           <h3 className="mb-2 line-clamp-2 text-sm font-semibold text-primary-900 group-hover:text-primary-700 transition-colors">{feed.title}</h3>
           {hasImage && imageUrl ? (
-            <div className="relative mb-2 h-32 w-full overflow-hidden rounded-md bg-primary-50">
+            <div className="relative mb-2 h-24 w-full overflow-hidden rounded-md bg-primary-50">
               <Image
                 src={imageUrl}
                 alt={feed.title}
@@ -185,9 +185,9 @@ export const FeedCard = ({ feed, size = 'medium', className = '' }: FeedCardProp
   // Default card (no image)
   return (
     <article className={`group rounded-xl border border-primary-100 bg-white overflow-hidden transition-all duration-300 shadow-sm hover:shadow focus-within:ring-2 focus-within:ring-primary-200 h-full ${className}`}>
-      <div className="h-1.5 bg-gradient-to-r from-primary-500 to-primary-700" />
+      <div className="h-1 bg-gradient-to-r from-primary-500 to-primary-700" />
 
-      <div className="p-5">
+      <div className="p-4">
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary-100">

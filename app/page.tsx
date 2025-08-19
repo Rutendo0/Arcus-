@@ -23,7 +23,6 @@ import FeedsTab from "./tabs/feeds";
 import CalendarTab from "./tabs/calendar";
 import NewsletterTab from "./tabs/newsletter";
 import PostsTab from "./tabs/posts";
-import { TickerStrip } from "@/components/ticker/TickerBar";
 
 export default function Home() {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -188,17 +187,6 @@ export default function Home() {
         <div className="flex h-screen overflow-hidden bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-50">
           <HomepageSidebar />
           <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Forex Exchange Ticker at the top */}
-            <div className="border-b border-blue-200 bg-white/80 backdrop-blur-md">
-              <div className="px-6 py-2">
-                <div className="flex items-center gap-2 mb-1">
-                  <h2 className="text-sm font-semibold tracking-tight text-foreground">
-                    Live Exchange Rates <span className="text-slate-400">(RBZ Official Rates)</span>
-                  </h2>
-                </div>
-                <TickerStrip className="rounded-lg shadow-sm" />
-              </div>
-            </div>
             <div className="flex-1 overflow-auto">
               <main className="p-6">
                 <div className="space-y-8">
