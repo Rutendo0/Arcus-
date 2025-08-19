@@ -1,18 +1,20 @@
 'use client'
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { Building2, TrendingUp, TrendingDown, DollarSign, ArrowRight } from 'lucide-react';
+import { Building2, TrendingUp, TrendingDown, ArrowRight } from 'lucide-react';
 import useSWR from 'swr';
 import { BankRatesResponse } from '@/types.db';
 
 interface BankRate {
   currency: string;
+  /** Display the quoted pair (e.g., "1USD-ZiG") */
   symbol: string;
   buy_rate: number;
   sell_rate: number;
   mid_rate: number;
   change: number;
   change_percent: number;
+  /** ISO date string from response (date_iso) */
   last_updated: string;
 }
 
@@ -67,38 +69,18 @@ const FloatingRBZData = () => {
 
   useEffect(() => setMounted(true), []);
 
-  const getCurrencySymbol = (currency: string): string => {
-    const symbolMap: Record<string, string> = {
-      USD: '$',
-      EUR: '€',
-      GBP: '£',
-      ZAR: 'R',
-      BWP: 'P',
-      AUD: 'A$',
-      CAD: 'C$',
-      CNY: '¥',
-      JPY: '¥',
-      CHF: 'CHF',
-      SEK: 'kr',
-      NOK: 'kr',
-      DKK: 'kr',
-      ZWL: 'Z$',
-    };
-    return symbolMap[currency] || currency;
-  };
-
   const rates: BankRate[] = useMemo(
     () =>
       bankRatesData?.exchange_rates?.map((rate) => ({
-        currency: rate.currency,
-        symbol: getCurrencySymbol(rate.currency),
-        buy_rate: rate.bid,
-        sell_rate: rate.ask,
-        mid_rate: rate.avg,
+        currency: rate.currency,           // e.g. "Zimbabwe Gold"
+        symbol: rate.pair,                 // e.g. "1USD-ZiG"
+        buy_rate: rate.we_buy,
+        sell_rate: rate.we_sell,
+        mid_rate: rate.mid_rate,
         change: 0,
         change_percent: 0,
-        last_updated: bankRatesData?.timestamp || new Date().toISOString(),
-      })) || [],
+        last_updated: bankRatesData?.date_iso ?? new Date().toISOString(),
+      })) ?? [],
     [bankRatesData]
   );
 
@@ -111,7 +93,7 @@ const FloatingRBZData = () => {
     return () => clearInterval(id);
   }, [rates.length]);
 
-  // --- States --------------------------------------------------------------
+  // --- UI shell --------------------------------------------------------------
   const BarShell = ({ children, tone = 'blue' }: { children: React.ReactNode; tone?: 'blue' | 'red' | 'yellow' }) => {
     const toneClasses = {
       blue: 'from-sky-900/80 via-sky-800/80 to-sky-900/80 border-sky-600/30',
@@ -123,7 +105,6 @@ const FloatingRBZData = () => {
       <div
         className={`relative overflow-hidden border-y ${toneClasses} bg-gradient-to-r backdrop-blur-xl shadow-[0_8px_30px_rgba(2,6,23,0.35)]`}
         style={{
-          // prevent overlap with sidebar on lg+ screens
           position: 'fixed',
           top: 64, // ~ top-16
           left: leftOffset,
@@ -199,7 +180,7 @@ const FloatingRBZData = () => {
               <span className="text-sm font-semibold leading-none text-white sm:text-base">{r.symbol}</span>
               <span className="truncate text-[11px] text-sky-200 sm:text-xs">{r.currency}</span>
             </div>
-            <div className="hidden h-4 w-px rounded bg-white/10 sm:block" />
+            <div className="hidden h-4 w-px rounded bg:white/10 sm:block bg-white/10" />
             <div className="text-center">
               <div className="text-[10px] text-sky-300">BUY</div>
               <div className="text-xs font-semibold text-white sm:text-sm">{r.buy_rate.toFixed(2)}</div>
@@ -227,7 +208,6 @@ const FloatingRBZData = () => {
 
           {/* Right cluster */}
           <div className="hidden items-center gap-2 text-sky-100 sm:flex">
-            <ArrowRight className="h-4 w-4" />
             <span className="text-[11px]">{currentIndex + 1}/{rates.length}</span>
           </div>
         </div>
