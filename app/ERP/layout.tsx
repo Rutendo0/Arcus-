@@ -211,17 +211,15 @@ const ERP = ({ children }: { children: React.ReactNode }) => {
         {/* Brand + Collapse */}
         <div className="flex items-center justify-between px-3 py-3 border-b border-slate-200/60">
           {!isMenuCollapsed ? (
-            <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <div className="flex items-center gap-2">
               <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 to-sky-500 shadow-sm" />
               <div className="leading-tight">
-                <p className="text-sm font-semibold tracking-tight text-slate-800">Arcus</p>
+                <p className="text-sm font-semibold tracking-tight text-slate-800">NVCCZ</p>
                 <p className="text-[11px] text-slate-500 -mt-0.5">Accounting</p>
               </div>
-            </Link>
+            </div>
           ) : (
-            <Link href="/" className="block hover:opacity-80 transition-opacity">
-              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 to-sky-500 shadow-sm" />
-            </Link>
+            <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-600 to-sky-500 shadow-sm" />
           )}
 
           <button

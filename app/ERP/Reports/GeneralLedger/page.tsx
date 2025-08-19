@@ -15,7 +15,7 @@ import {
 } from 'react-icons/fi';
 import ERP from '../../page';
 import Link from 'next/link';
-import ExcelJS from 'exceljs';
+import * as XLSX from 'xlsx';
 
 type Currency = {
   id: string;
@@ -111,6 +111,7 @@ const GeneralLedger = () => {
         if (!token) {
           throw new Error('No authentication token found');
         }
+        console.log(token);
 
         const response = await fetch('https://nvccz-pi.vercel.app/api/accounting/journal-entries', {
           headers: {
@@ -139,6 +140,8 @@ const GeneralLedger = () => {
 
     fetchGeneralLedger();
   }, []);
+
+
 
   useEffect(() => {
     const filtered = journalEntries.filter(entry => {
@@ -224,78 +227,40 @@ const GeneralLedger = () => {
     }
   };
 
-  const exportToExcel = async () => {
+  const exportToExcel = () => {
     setExporting(true);
     try {
-      // Create a new workbook and worksheet
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet('General Ledger');
-      
-      // Define columns
-      worksheet.columns = [
-        { header: 'Date', key: 'date', width: 15 },
-        { header: 'Reference', key: 'reference', width: 15 },
-        { header: 'Description', key: 'description', width: 30 },
-        { header: 'Account Code', key: 'accountCode', width: 15 },
-        { header: 'Account Name', key: 'accountName', width: 25 },
-        { header: 'Account Type', key: 'accountType', width: 15 },
-        { header: 'Debit', key: 'debit', width: 15 },
-        { header: 'Credit', key: 'credit', width: 15 },
-        { header: 'Status', key: 'status', width: 12 },
-        { header: 'Currency', key: 'currency', width: 10 },
-        { header: 'Created By', key: 'createdBy', width: 20 },
-        { header: 'Created At', key: 'createdAt', width: 15 }
-      ];
-      
-      // Style the header row
-      worksheet.getRow(1).font = { bold: true };
-      worksheet.getRow(1).fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FFE0E0E0' }
-      };
-      
-      // Add data rows
-      flattenedEntries.forEach(({ entry, line }) => {
+      // Prepare the data for export
+      const dataToExport = flattenedEntries.map(({ entry, line }) => {
         const account = getAccountInfo(line);
-        worksheet.addRow({
-          date: formatDate(entry.transactionDate),
-          reference: entry.referenceNumber || 'N/A',
-          description: line.description || entry.description || 'No description',
-          accountCode: account.code,
-          accountName: account.name,
-          accountType: account.type,
-          debit: line.debitAmount !== "0" ? parseFloat(line.debitAmount) : 0,
-          credit: line.creditAmount !== "0" ? parseFloat(line.creditAmount) : 0,
-          status: entry.status,
-          currency: entry.currency?.code || 'USD',
-          createdBy: `${entry.createdBy?.firstName} ${entry.createdBy?.lastName}`,
-          createdAt: formatDate(entry.createdAt)
-        });
+        return {
+          'Date': formatDate(entry.transactionDate),
+          'Reference': entry.referenceNumber || 'N/A',
+          'Description': line.description || entry.description || 'No description',
+          'Account Code': account.code,
+          'Account Name': account.name,
+          'Account Type': account.type,
+          'Debit': line.debitAmount !== "0" ? parseFloat(line.debitAmount) : 0,
+          'Credit': line.creditAmount !== "0" ? parseFloat(line.creditAmount) : 0,
+          'Status': entry.status,
+          'Currency': entry.currency?.code || 'USD',
+          'Created By': `${entry.createdBy?.firstName} ${entry.createdBy?.lastName}`,
+          'Created At': formatDate(entry.createdAt)
+        };
       });
+
+      // Create workbook and worksheet
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(dataToExport);
       
-      // Format number columns
-      worksheet.getColumn('debit').numFmt = '#,##0.00';
-      worksheet.getColumn('credit').numFmt = '#,##0.00';
+      // Add worksheet to workbook
+      XLSX.utils.book_append_sheet(wb, ws, "General Ledger");
       
       // Generate file name with current date
       const fileName = `General_Ledger_${new Date().toISOString().split('T')[0]}.xlsx`;
       
-      // Create a buffer
-      const buffer = await workbook.xlsx.writeBuffer();
-      
-      // Create a Blob from the buffer
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      
-      // Create a download link and trigger the download
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      
-      // Clean up
-      window.URL.revokeObjectURL(url);
+      // Export the file
+      XLSX.writeFile(wb, fileName);
     } catch (error) {
       console.error('Error exporting to Excel:', error);
       alert('Failed to export data. Please try again.');

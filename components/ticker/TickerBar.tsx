@@ -116,7 +116,7 @@ export function TickerStrip({ className = "" }: TickerStripProps) {
       {/* Error indicator (if using fallback data) */}
       {error && (
         <div className="absolute top-1 left-4 text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
-          Using sample data - {error}
+          .
         </div>
       )}
 

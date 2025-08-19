@@ -37,7 +37,8 @@ const Reports = () => {
             description: 'Track cash inflows and outflows across operating activities',
             icon: <FiTrendingUp className="text-navy-600" size={24} />,
             bgColor: 'bg-teal-50',
-            hoverColor: 'hover:bg-teal-100'
+            hoverColor: 'hover:bg-teal-100',
+                  path: '/ERP/Reports/CashFlow'
         },
         {
             id: 'profit-loss',
