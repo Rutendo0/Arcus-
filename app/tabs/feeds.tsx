@@ -63,7 +63,7 @@ const CombinedRateCard = ({
   const list = currentView === "crypto" ? cryptoData : forexData;
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-900/90 via-indigo-800/90 to-purple-900/90 p-3 shadow-[0_8px_30px_rgba(79,70,229,0.2)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_8px_30px_rgba(79,70,229,0.3)]">
+    <div className="group relative overflow-hidden rounded-2xl border border-indigo-500/30 bg-gradient-to-br from-indigo-900/90 via-indigo-800/90 to-purple-900/90 p-2.5 shadow-[0_8px_24px_rgba(79,70,229,0.18)] backdrop-blur-xl transition-all duration-300 hover:shadow-[0_8px_26px_rgba(79,70,229,0.26)]">
       {/* Animated background effect */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/10 via-purple-600/5 to-blue-600/10 opacity-30" />
       <div className="absolute -inset-[100%] animate-[spin_60s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_340deg,rgba(56,189,248,0.1)_360deg)] blur-3xl" />
@@ -212,7 +212,7 @@ const FeedPage = () => {
     }
   };
   const [searchTerm, setSearchTerm] = useState("");
-  const [visibleCount, setVisibleCount] = useState(12); // infinite-scroll placeholder
+  const [visibleCount, setVisibleCount] = useState(24); // Show more articles to fill the grid
 
   useEffect(() => setMounted(true), []);
 
@@ -300,27 +300,36 @@ const FeedPage = () => {
   const rates = getRatesData();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-white to-white" data-feeds-container>
-      {/* Header */}
-      <header className="sticky top-0 z-20 border-b border-input bg-card/90 backdrop-blur-xl">
-        <div className="mx-auto max-w-7xl px-3 py-3 sm:px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50" data-feeds-container>
+      {/* Enhanced Header with better visual hierarchy */}
+      <header className="sticky top-0 z-20 border-b border-slate-200/60 bg-white/95 backdrop-blur-xl shadow-sm">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-sky-600 to-indigo-600 shadow-md" />
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 shadow-lg" />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-400/20 to-purple-400/20 blur-xl" />
+              </div>
               <div>
-                <h1 className="text-lg font-bold tracking-tight text-foreground sm:text-base">
-                  Arcus Financial Feeds
+                <h1 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+                  Financial News Hub
                 </h1>
-                <p className="text-[11px] font-medium text-foreground">Curated informatics • live rates</p>
+                <p className="text-sm font-medium text-slate-600">Real-time insights • Global markets • Live data</p>
               </div>
             </div>
-            <button
-              onClick={refresh}
-              className="inline-flex items-center justify-center gap-2 rounded-lg border border-input bg-slate-300 px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-colors hover:border-primary/50"
-            >
-              <RefreshCw size={16} />
-              Refresh
-            </button>
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center gap-2 text-sm text-slate-500">
+                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                <span>Live</span>
+              </div>
+              <button
+                onClick={refresh}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 shadow-sm transition-all hover:bg-slate-50 hover:border-slate-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+              >
+                <RefreshCw size={16} />
+                <span className="hidden sm:inline">Refresh</span>
+              </button>
+            </div>
           </div>
         </div>
       </header>
@@ -333,65 +342,68 @@ const FeedPage = () => {
         <div className="mb-2"><ZimFinancialData /></div>
       </section>
 
-      {/* Main layout - Dynamic Magazine Grid */}
-      <main className="mx-auto max-w-7xl px-2 pb-6 sm:px-3">
-        {/* Search & Filters */}
-        <div className="mb-4 rounded-2xl border border-input bg-card/80 p-3 shadow-sm backdrop-blur">
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+      {/* Main layout - Enhanced Magazine Grid */}
+      <main className="mx-auto max-w-7xl px-4 pb-8 sm:px-6">
+        {/* Enhanced Search & Filters */}
+        <div className="mb-6 rounded-3xl border border-slate-200/60 bg-white/80 p-6 shadow-lg backdrop-blur-xl">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <div className="relative flex-1">
-              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
               <input
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 type="text"
-                placeholder="Search financial news…"
-                className="w-full rounded-xl border border-input bg-background/60 py-2 pl-9 pr-3 text-sm text-foreground placeholder:text-muted-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+                placeholder="Search financial news, markets, analysis..."
+                className="w-full rounded-2xl border border-slate-200 bg-slate-50/50 py-3.5 pl-12 pr-4 text-sm text-slate-900 placeholder:text-slate-500 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:shadow-lg"
               />
             </div>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <Filter size={16} /> Filter
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 text-sm text-slate-600">
+                <Filter size={18} className="text-slate-400" />
+                <span className="font-medium">Filters</span>
+              </div>
+              <div className="h-6 w-px bg-slate-200" />
+              <span className="text-sm font-medium text-slate-500">
+                {filteredFeeds.length} articles
+              </span>
             </div>
           </div>
 
-          {/* Category pills (scrollable on mobile) */}
-          <div className="mt-2 flex gap-2 overflow-x-auto pb-3 scrollbar-container">
+          {/* Enhanced Category pills */}
+          <div className="mt-4 flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => handleCategoryChange(category.id)}
-                className={`flex-shrink-0 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition-all ${
+                className={`flex-shrink-0 inline-flex items-center gap-2.5 rounded-2xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 ${
                   selectedCategory === category.id
-                    ? "bg-primary-100 text-primary-900 border-2 border-primary-600 shadow-md font-bold"
-                    : "bg-slate-100 text-slate-700 border-2 border-transparent hover:bg-slate-200 hover:text-slate-900"
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25 scale-105"
+                    : "bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 hover:shadow-md"
                 }`}
               >
                 {category.id === "african" ? (
-                  <MapPin size={16} />
+                  <MapPin size={16} className={selectedCategory === category.id ? "text-white" : "text-slate-500"} />
                 ) : (
-                  <Globe size={16} />
+                  <Globe size={16} className={selectedCategory === category.id ? "text-white" : "text-slate-500"} />
                 )}
                 <span>{category.name}</span>
+                {selectedCategory === category.id && (
+                  <div className="h-1.5 w-1.5 rounded-full bg-white/80" />
+                )}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Count */}
-        <div className="mb-3">
-          <h2 className="text-sm font-semibold tracking-tight text-foreground">
-            Latest News <span className="text-slate-400">({filteredFeeds.length} articles)</span>
-          </h2>
-        </div>
-
-        {/* Dynamic Bing-style Grid Layout */}
+        {/* Enhanced Dynamic Magazine Grid Layout */}
         {filteredFeeds.length > 0 && !feedsLoading && (
           <>
             <div 
-              className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-8 gap-1" 
+              className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2" 
               style={{ 
                 gridAutoFlow: 'row dense', 
-                gridAutoRows: 'minmax(120px, auto)',
-                gridTemplateRows: 'repeat(auto-fit, minmax(120px, auto))'
+                gridAutoRows: 'minmax(240px, auto)',
+                gridTemplateRows: 'repeat(auto-fit, minmax(240px, auto))'
               }} 
               aria-live="polite" 
               aria-busy={feedsLoading}
@@ -408,7 +420,7 @@ const FeedPage = () => {
                 // Create the grid items array including crypto, weather, and feeds
                 const gridItems = [];
 
-                // Add crypto card as first item (small tile)
+                // Add crypto card as first item (bigger tile)
                 gridItems.push({
                   type: 'crypto',
                   component: (
@@ -417,7 +429,7 @@ const FeedPage = () => {
                       whileInView={{ y: 0, opacity: 1 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.3, delay: 0.1 }}
-                      className="col-span-2 md:col-span-2 lg:col-span-2 row-span-2"
+                      className="col-span-1 md:col-span-1 lg:col-span-1 row-span-1"
                     >
                       <CombinedRateCard
                         cryptoData={rates.crypto}
@@ -429,7 +441,7 @@ const FeedPage = () => {
                   )
                 });
 
-                // Add weather card as second item (small tile)
+                // Add weather card as second item (bigger tile)
                 gridItems.push({
                   type: 'weather',
                   component: (
@@ -438,7 +450,7 @@ const FeedPage = () => {
                       whileInView={{ y: 0, opacity: 1 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.3, delay: 0.2 }}
-                      className="col-span-2 md:col-span-2 lg:col-span-2 row-span-2"
+                      className="col-span-1 md:col-span-1 lg:col-span-1 row-span-1"
                     >
                       <WeatherCard className="w-full h-full" />
                     </motion.div>
@@ -451,7 +463,11 @@ const FeedPage = () => {
                 let feedItemIndex = 0;
 
                 // Improved algorithm to minimize white space
-                const totalItems = Math.min(visibleCount, feedsWithImages.length + feedsWithoutImages.length);
+                const extra = selectedCategory === 'international' ? 1 : selectedCategory === 'african' ? 2 : 0;
+                const totalItems = Math.min(
+                  visibleCount + extra,
+                  feedsWithImages.length + feedsWithoutImages.length
+                );
                 
                 while (gridItems.length < totalItems + 2 && (imageIndex < feedsWithImages.length || textIndex < feedsWithoutImages.length)) {
                   // Prioritize filling with image content first, then text content
@@ -459,26 +475,26 @@ const FeedPage = () => {
                     const feed = feedsWithImages[imageIndex];
                     let colSpan: string, rowSpan: string, size: 'small' | 'medium' | 'large' | 'featured';
 
-                    // Prioritize image-based articles with bigger sizes
+                    // Make all articles bigger and fill the grid better
                     if (feedItemIndex === 0) {
-                      // First image article gets featured tile (very large)
-                      colSpan = 'col-span-2 md:col-span-4 lg:col-span-5';
-                      rowSpan = 'row-span-5';
+                      // First image article gets featured tile (spans 2 columns)
+                      colSpan = 'col-span-1 md:col-span-2 lg:col-span-2';
+                      rowSpan = 'row-span-3';
                       size = 'featured';
-                    } else if (feedItemIndex % 5 === 0 && feedItemIndex > 0) {
-                      // Every 5th image article gets large tile
-                      colSpan = 'col-span-2 md:col-span-3 lg:col-span-4';
-                      rowSpan = 'row-span-4';
+                    } else if (feedItemIndex % 4 === 0 && feedItemIndex > 0) {
+                      // Every 4th image article gets large tile (spans 2 columns)
+                      colSpan = 'col-span-1 md:col-span-2 lg:col-span-2';
+                      rowSpan = 'row-span-2';
                       size = 'large';
                     } else if (feedItemIndex % 3 === 0) {
-                      // Every 3rd image article gets medium-large tile
-                      colSpan = 'col-span-2 md:col-span-3 lg:col-span-3';
-                      rowSpan = 'row-span-4';
+                      // Every 3rd image article gets large tile
+                      colSpan = 'col-span-1 md:col-span-1 lg:col-span-2';
+                      rowSpan = 'row-span-2';
                       size = 'large';
                     } else {
-                      // Other image items get medium tiles (still bigger than before)
-                      colSpan = 'col-span-2 md:col-span-2 lg:col-span-3';
-                      rowSpan = 'row-span-3';
+                      // Other image items get medium tiles (bigger than before)
+                      colSpan = 'col-span-1 md:col-span-1 lg:col-span-1';
+                      rowSpan = 'row-span-2';
                       size = 'medium';
                     }
 
@@ -493,10 +509,10 @@ const FeedPage = () => {
                           transition={{ duration: 0.25, delay: 0.05 * feedItemIndex, ease: "easeOut" }}
                           className={`group relative ${colSpan} ${rowSpan}`}
                         >
-                          <div className="h-full [--x:50%] [--y:50%] relative overflow-hidden rounded-xl shadow-sm transition-all hover:shadow-md">
+                          <div className="h-full relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1">
                             <FeedCard feed={feed} size={size} />
-                            <div className="pointer-events-none absolute -inset-12 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-40" 
-                                 style={{ background: "radial-gradient(600px circle at var(--x,50%) var(--y,50%), rgba(56,189,248,.10), transparent 40%)" }} />
+                            <div className="pointer-events-none absolute -inset-8 opacity-0 blur-3xl transition-all duration-500 group-hover:opacity-30" 
+                                 style={{ background: "radial-gradient(800px circle at 50% 50%, rgba(59,130,246,0.15), rgba(147,51,234,0.1), transparent 70%)" }} />
                           </div>
                         </motion.div>
                       )
@@ -519,12 +535,12 @@ const FeedPage = () => {
                           whileInView={{ y: 0, opacity: 1 }}
                           viewport={{ once: true, margin: "-50px" }}
                           transition={{ duration: 0.25, delay: 0.05 * feedItemIndex, ease: "easeOut" }}
-                          className="group relative col-span-2 md:col-span-2 lg:col-span-2 row-span-2"
+                          className="group relative col-span-1 md:col-span-1 lg:col-span-1 row-span-1"
                         >
-                          <div className="h-full [--x:50%] [--y:50%] relative overflow-hidden rounded-xl shadow-sm transition-all hover:shadow-md min-h-[200px]">
+                          <div className="h-full relative overflow-hidden rounded-2xl shadow-md transition-all duration-300 hover:shadow-xl hover:scale-[1.02] hover:-translate-y-1 min-h-[240px]">
                             <FeedCard feed={feed} size="small" />
-                            <div className="pointer-events-none absolute -inset-12 opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-40" 
-                                 style={{ background: "radial-gradient(600px circle at var(--x,50%) var(--y,50%), rgba(56,189,248,.10), transparent 40%)" }} />
+                            <div className="pointer-events-none absolute -inset-8 opacity-0 blur-3xl transition-all duration-500 group-hover:opacity-25" 
+                                 style={{ background: "radial-gradient(600px circle at 50% 50%, rgba(59,130,246,0.12), rgba(147,51,234,0.08), transparent 70%)" }} />
                           </div>
                         </motion.div>
                       )
@@ -539,39 +555,54 @@ const FeedPage = () => {
               })()}
             </div>
 
-            {/* Load more button */}
+            {/* Enhanced Load more button */}
             {visibleCount < filteredFeeds.length && (
-              <div className="mt-6 flex justify-center">
+              <div className="mt-8 flex justify-center">
                 <motion.button
-                  onClick={() => setVisibleCount((c) => c + 9)}
-                  className="group relative overflow-hidden rounded-full bg-gradient-to-r from-sky-600 to-indigo-600 px-6 py-2.5 text-sm font-medium text-white shadow-md transition-all hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-sky-500/50"
-                  whileHover={{ scale: 1.03 }}
+                  onClick={() => setVisibleCount((c) => c + 12)}
+                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-8 py-4 text-sm font-semibold text-white shadow-xl transition-all hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-blue-500/20"
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <span className="relative z-10">Load more articles</span>
-                  <span className="absolute inset-0 -z-10 bg-gradient-to-r from-indigo-600 to-sky-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100"></span>
+                  <span className="relative z-10 flex items-center gap-2">
+                    Load more articles
+                    <TrendingUp size={16} className="transition-transform group-hover:translate-x-1" />
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="absolute -inset-4 bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </motion.button>
               </div>
             )}
           </>
         )}
 
-        {/* Empty state */}
+        {/* Enhanced Empty state */}
         {filteredFeeds.length === 0 && !feedsLoading && (
-          <div className="grid place-items-center rounded-2xl border border-input bg-card/80 py-16 text-center shadow-sm backdrop-blur">
-            <Newspaper className="mb-4 h-16 w-16 text-muted-foreground opacity-50" />
-            <h3 className="mb-2 text-xl font-medium text-foreground">No articles found</h3>
-            <p className="mb-6 max-w-md text-muted-foreground">Try adjusting your search terms or selecting a different category</p>
-            <button 
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="grid place-items-center rounded-3xl border border-slate-200/60 bg-white/80 py-20 text-center shadow-lg backdrop-blur-xl"
+          >
+            <div className="relative mb-6">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400/20 to-purple-400/20 blur-2xl" />
+              <Newspaper className="relative h-20 w-20 text-slate-400" />
+            </div>
+            <h3 className="mb-3 text-2xl font-bold text-slate-900">No articles found</h3>
+            <p className="mb-8 max-w-md text-slate-600 leading-relaxed">
+              We couldn't find any articles matching your criteria. Try adjusting your search terms or exploring different categories.
+            </p>
+            <motion.button 
               onClick={() => {
                 setSearchTerm('');
-                handleCategoryChange('zimbabwean');
+                handleCategoryChange('african');
               }}
-              className="rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/20"
+              className="rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-500/20"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
             >
-              Reset filters
-            </button>
-          </div>
+              Reset filters & explore
+            </motion.button>
+          </motion.div>
         )}
       </main>
     </div>
